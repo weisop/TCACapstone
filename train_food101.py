@@ -16,7 +16,7 @@ NUM_CLASSES = 101
 TRAIN_LIMIT = 10000
 VAL_LIMIT = 2000
 BATCH_SIZE = 16
-EPOCHS = 10
+EPOCHS = 4
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 os.makedirs("saved_models", exist_ok=True)

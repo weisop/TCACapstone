@@ -1,7 +1,7 @@
 import base64
 import requests
 
-image_path = "images.jpg"
+image_path = "test_bibimbap.jpg"
 
 with open(image_path, "rb") as f:
     image_base64 = base64.b64encode(f.read()).decode("utf-8")

@@ -10,6 +10,7 @@ from PIL import Image
 from fastapi import FastAPI
 from pydantic import BaseModel
 from torchvision import models, transforms
+from fastapi import UploadFile, File
 
 
 MODEL_PATH = "saved_models/resnet18_food101_acc_0.6585.pth"
@@ -149,6 +150,22 @@ def predict_full(request: PredictRequest):
     Full consulting demo endpoint with human-in-the-loop routing.
     """
     image = decode_base64_image(request.image)
+
+    quality = image_quality_check(image)
+    prediction = classify_food(image)
+    route = route_decision(quality, prediction["confidence"])
+
+    return {
+        "label": prediction["label"],
+        "confidence": prediction["confidence"],
+        "top_3": prediction["top_3"],
+        "image_quality": quality,
+        "route": route
+    }
+
+@app.post("/upload_predict")
+async def upload_predict(file: UploadFile = File(...)):
+    image = Image.open(file.file).convert("RGB")
 
     quality = image_quality_check(image)
     prediction = classify_food(image)
